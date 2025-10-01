@@ -10,21 +10,63 @@
 
   <style>
     /* Streamlined header overrides */
-    header .brand img { display:none; } /* hide logo if you prefer text-only */
-    #mainNav a, #mainNav button { display:none; } /* hide all nav links */
-    #mainNav .home { display:inline-block; } /* show only home */
-    #mainNav .home:hover { background:#065c2f; color:#fff; }
+    header .brand img { display: none; }
+    #mainNav a, #mainNav button { display: none; }
+    #mainNav .home { display: inline-block; }
+    #mainNav .home:hover { background: #065c2f; color: #fff; }
 
     /* Layout tweaks */
-    body { font-family: 'Nunito', sans-serif; margin:0; background:#f9fafb; }
-    #game { max-width: 600px; margin: 2rem auto; background:#fff; padding:2rem; border-radius:12px; box-shadow:0 4px 16px rgba(0,0,0,0.08); }
-    h2 { font-size:1.8rem; margin-bottom:0.5rem; color:#1f2937; }
-    p { color:#4b5563; margin-bottom:1.5rem; }
-    button { background:#0b7d40; color:#fff; border:none; padding:0.6rem 1rem; border-radius:6px; cursor:pointer; font-weight:600; }
-    button:hover { background:#065c2f; }
-    input[type=text] { width:100%; padding:0.75rem 1rem; border:1px solid #d1d5db; border-radius:6px; margin-bottom:1rem; font-size:1rem; }
-    #feedback { margin-top:1rem; font-size:1.1rem; }
-    #answer { margin-top:0.5rem; color:#0b7d40; font-weight:600; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      margin: 0;
+      background: #f9fafb;
+    }
+    #game {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      color: #1f2937;
+    }
+    p {
+      color: #4b5563;
+      margin-bottom: 1.5rem;
+    }
+    button {
+      background: #0b7d40;
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button:hover {
+      background: #065c2f;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    #feedback {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+    }
+    #answer {
+      margin-top: 0.5rem;
+      color: #0b7d40;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -33,7 +75,7 @@
       <h1 style="margin:0; font-size:1.2rem; color:#fff;">Heardle Noor Al Huda</h1>
     </div>
     <nav id="mainNav">
-      <a href="../index.html" class="home">Home</a>
+      <a href="index.html" class="home">Home</a>
     </nav>
   </header>
 
@@ -58,36 +100,64 @@
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
     const songs = [
-      { id:'VID1', title:'...', artist:'...', start:40, length:10 },
-      /* more... */
+      { id: 'LmoTq5mA1Pk', title: 'Haidar Ya Ali', artist: 'Ali Bouhamad', start: 45, length: 10 },
+      { id: 'X4dO7whTwfc', title: 'Welcome in All Languages (Mashaya Poem)', artist: 'Haider Al-Bayati', start: 60, length: 12 },
+      { id: '5xJkdp_3cDA', title: 'Ali (May Allah Be Pleased With Him)', artist: 'Mishary Rashid Alafasy', start: 40, length: 10 },
+      { id: 'P4BgXRm3cf8', title: 'Walking Planet (Mashaya Poem 1446 AH)', artist: 'Haider Al-Bayati', start: 50, length: 10 },
+      { id: 'tXp_14uOh1c', title: 'Step by Step (We Are Servants)', artist: 'Nazar Al Qatari', start: 55, length: 10 },
+      { id: 'CmWOpmoQlow', title: 'Journey to Allah', artist: 'Haider Al-Bayati', start: 60, length: 10 },
+      { id: 'sduS4UMqRCE', title: 'Wrath of Allah (7th Night of Muharram 1446 AH)', artist: 'Haider Al-Bayati', start: 45, length: 10 },
+      { id: 'iEkyieYcICo', title: 'Visitor of Ali', artist: 'Haider Al-Bayati', start: 50, length: 10 },
+      { id: '40nEFfCzb0U', title: 'Maula Ya Salli (Slowed & Reverb)', artist: 'Sami Yusuf ft. Qasida Burda Shareef', start: 40, length: 10 },
+      { id: 'Vqfy4ScRXFQ', title: 'Ya Nabi Salam Alayka (Arabic Version)', artist: 'Maher Zain', start: 45, length: 10 },
+      { id: 'ik8jfDQrLAs', title: 'Qalbi Fil Madinah', artist: 'Maher Zain & Harris J', start: 50, length: 10 },
+      { id: 'tBbdSzwxqyY', title: 'Rahmatun Lil’Alameen', artist: 'Maher Zain', start: 40, length: 10 },
+      { id: 'pwgLyCIMJKQ', title: 'Peace Be Upon You, Mahdi', artist: 'Mohammed Ghuloom', start: 45, length: 10 },
+      { id: 'iU3mHGLhpT0', title: 'They Heard Me Say Welcome', artist: 'Sayyed Fadhel Al-Mousawi', start: 50, length: 10 },
+      { id: 'rGLgjU9Q97E', title: 'Life and Death', artist: 'Ali Bouhamad', start: 45, length: 10 },
+      { id: 'GojSIX707xI', title: 'Your Mention is Ali', artist: 'Mulla Hatim Al-Abdullah', start: 50, length: 10 },
+      { id: 'ch3bBvbwzwg', title: 'Tasbihat of Zahra', artist: 'Hajj Mahdi Rasouli', start: 40, length: 10 },
+      { id: '1axNTXhMXsU', title: 'Ayatollah (In Praise of Amir al-Mu’minin)', artist: 'Nazar Al Qatari & Sayyed Mohammed Al-Husseini', start: 55, length: 10 },
+      { id: 'MMYygIYXmuo', title: 'Image of Ali', artist: 'Mulla Ali Al-Saadi', start: 45, length: 10 },
+      { id: '7jMNpnQel74', title: 'Hasbi Rabbi', artist: 'Sami Yusuf', start: 50, length: 10 }
     ];
+
     let player, current, timer;
     function onYouTubeIframeAPIReady() {
-      player=new YT.Player('player',{height:'0',width:'0',playerVars:{controls:0},events:{onReady:()=>loadSong()}});
+      player = new YT.Player('player', {
+        height: '0',
+        width: '0',
+        playerVars: { controls: 0 },
+        events: { onReady: () => loadSong() }
+      });
     }
-    function loadSong(){
-      current=songs[Math.floor(Math.random()*songs.length)];
-      document.getElementById('feedback').textContent='';
-      document.getElementById('answer').textContent='';
-      document.getElementById('guessInput').value='';
-      player.loadVideoById({videoId:current.id,startSeconds:current.start});
+
+    function loadSong() {
+      current = songs[Math.floor(Math.random() * songs.length)];
+      document.getElementById('feedback').textContent = '';
+      document.getElementById('answer').textContent = '';
+      document.getElementById('guessInput').value = '';
+      player.loadVideoById({ videoId: current.id, startSeconds: current.start });
     }
-    document.getElementById('playBtn').onclick=_=>{
+
+    document.getElementById('playBtn').onclick = () => {
       clearTimeout(timer);
       player.seekTo(current.start);
       player.playVideo();
-      timer=setTimeout(()=>player.pauseVideo(),current.length*1000);
+      timer = setTimeout(() => player.pauseVideo(), current.length * 1000);
     };
-    document.getElementById('revealBtn').onclick=_=>{
-      document.getElementById('answer').textContent=`Answer: ${current.title} — ${current.artist}`;
+
+    document.getElementById('revealBtn').onclick = () => {
+      document.getElementById('answer').textContent = `Answer: ${current.title} — ${current.artist}`;
     };
-    document.getElementById('submitBtn').onclick=_=>{
-      let g=document.getElementById('guessInput').value.trim().toLowerCase(),
-          c=current.title.toLowerCase(),
-          fb=document.getElementById('feedback');
-      fb.textContent = g===c?'✅ Correct!':'❌ Incorrect.';
+
+    document.getElementById('submitBtn').onclick = () => {
+      const guess = document.getElementById('guessInput').value.trim().toLowerCase();
+      const correct = current.title.toLowerCase();
+      document.getElementById('feedback').textContent = guess === correct ? 'Correct!' : 'Incorrect.';
     };
-    document.getElementById('nextBtn').onclick=_=>loadSong();
+
+    document.getElementById('nextBtn').onclick = () => loadSong();
   </script>
 </body>
 </html>
