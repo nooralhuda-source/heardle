@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Heardle Noor Al Huda</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Global styles (including header) -->
+  <link rel="stylesheet" href="../style.css">
+
+  <style>
+    /* Streamlined header overrides */
+    header .brand img { display:none; } /* hide logo if you prefer text-only */
+    #mainNav a, #mainNav button { display:none; } /* hide all nav links */
+    #mainNav .home { display:inline-block; } /* show only home */
+    #mainNav .home:hover { background:#065c2f; color:#fff; }
+
+    /* Layout tweaks */
+    body { font-family: 'Nunito', sans-serif; margin:0; background:#f9fafb; }
+    #game { max-width: 600px; margin: 2rem auto; background:#fff; padding:2rem; border-radius:12px; box-shadow:0 4px 16px rgba(0,0,0,0.08); }
+    h2 { font-size:1.8rem; margin-bottom:0.5rem; color:#1f2937; }
+    p { color:#4b5563; margin-bottom:1.5rem; }
+    button { background:#0b7d40; color:#fff; border:none; padding:0.6rem 1rem; border-radius:6px; cursor:pointer; font-weight:600; }
+    button:hover { background:#065c2f; }
+    input[type=text] { width:100%; padding:0.75rem 1rem; border:1px solid #d1d5db; border-radius:6px; margin-bottom:1rem; font-size:1rem; }
+    #feedback { margin-top:1rem; font-size:1.1rem; }
+    #answer { margin-top:0.5rem; color:#0b7d40; font-weight:600; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1 style="margin:0; font-size:1.2rem; color:#fff;">Heardle Noor Al Huda</h1>
+    </div>
+    <nav id="mainNav">
+      <a href="../index.html" class="home">Home</a>
+    </nav>
+  </header>
+
+  <div id="game">
+    <h2>Guess the Latmiya/Nasheed</h2>
+    <p>Listen to the chorus snippet, type your guess below, then submit.</p>
+
+    <div id="player" style="position:absolute; left:-9999px;"></div>
+
+    <button id="playBtn">▶ Play Snippet</button>
+    <button id="revealBtn">🔍 Reveal Answer</button>
+
+    <input type="text" id="guessInput" placeholder="Type song title..." autocomplete="off" />
+    <button id="submitBtn">Submit</button>
+
+    <div id="feedback"></div>
+    <div id="answer"></div>
+    <button id="nextBtn">Next →</button>
+  </div>
+
+  <!-- YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    const songs = [
+      { id:'VID1', title:'...', artist:'...', start:40, length:10 },
+      /* more... */
+    ];
+    let player, current, timer;
+    function onYouTubeIframeAPIReady() {
+      player=new YT.Player('player',{height:'0',width:'0',playerVars:{controls:0},events:{onReady:()=>loadSong()}});
+    }
+    function loadSong(){
+      current=songs[Math.floor(Math.random()*songs.length)];
+      document.getElementById('feedback').textContent='';
+      document.getElementById('answer').textContent='';
+      document.getElementById('guessInput').value='';
+      player.loadVideoById({videoId:current.id,startSeconds:current.start});
+    }
+    document.getElementById('playBtn').onclick=_=>{
+      clearTimeout(timer);
+      player.seekTo(current.start);
+      player.playVideo();
+      timer=setTimeout(()=>player.pauseVideo(),current.length*1000);
+    };
+    document.getElementById('revealBtn').onclick=_=>{
+      document.getElementById('answer').textContent=`Answer: ${current.title} — ${current.artist}`;
+    };
+    document.getElementById('submitBtn').onclick=_=>{
+      let g=document.getElementById('guessInput').value.trim().toLowerCase(),
+          c=current.title.toLowerCase(),
+          fb=document.getElementById('feedback');
+      fb.textContent = g===c?'✅ Correct!':'❌ Incorrect.';
+    };
+    document.getElementById('nextBtn').onclick=_=>loadSong();
+  </script>
+</body>
+</html>
