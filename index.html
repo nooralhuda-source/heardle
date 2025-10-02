@@ -28,6 +28,7 @@
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      position: relative;
     }
     h2 {
       font-size: 1.8rem;
@@ -46,6 +47,7 @@
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
+      margin-right: 0.5rem;
     }
     button:hover {
       background: #065c2f;
@@ -55,38 +57,13 @@
       padding: 0.75rem 1rem;
       border: 1px solid #d1d5db;
       border-radius: 6px;
+      margin-bottom: 0.5rem;
       font-size: 1rem;
       box-sizing: border-box;
     }
 
-    /* autocomplete container */
-    .autocomplete {
-      position: relative;
-      margin-bottom: 1rem;
-    }
-    #suggestions {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      background: #fff;
-      max-height: 200px;
-      overflow-y: auto;
-      z-index: 10;
-      display: none;
-    }
-    #suggestions li {
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-    }
-    #suggestions li:hover {
-      background: #f3f4f6;
-    }
+    /* datalist fallback styling */
+    datalist { display: none; }
 
     /* popup + overlay */
     #overlay {
@@ -107,8 +84,8 @@
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.2);
       z-index: 100;
-      max-width: 90%;
-      width: 320px;
+      width: 90%;
+      max-width: 320px;
       text-align: center;
     }
     #popup h3 {
@@ -116,12 +93,12 @@
       color: #1f2937;
     }
     #popup-title {
+      margin: 0.5rem 0;
       font-weight: 600;
-      margin-bottom: 0.5rem;
     }
     #popup-artist {
       color: #4b5563;
-      margin-bottom: 1rem;
+      margin: 0 0 1rem;
     }
     #popup audio {
       width: 100%;
@@ -153,17 +130,24 @@
     <h2>Guess the Latmiya/Nasheed</h2>
     <p>Listen to the chorus snippet, type your guess below, then submit.</p>
 
+    <!-- hidden YouTube player -->
     <div id="player" style="position:absolute; left:-9999px;"></div>
 
     <button id="playBtn">▶ Play Snippet</button>
     <button id="revealBtn">🔍 Reveal Answer</button>
 
-    <div class="autocomplete">
-      <input type="text" id="guessInput" placeholder="Type song title..." autocomplete="off" />
-      <ul id="suggestions"></ul>
-    </div>
+    <!-- search input with native dropdown -->
+    <input
+      type="text"
+      id="guessInput"
+      placeholder="Type song title..."
+      autocomplete="off"
+      list="songList"
+    />
+    <datalist id="songList"></datalist>
 
     <button id="submitBtn">Submit</button>
+    <button id="nextBtn">Next</button>
   </div>
 
   <div id="overlay"></div>
@@ -201,124 +185,80 @@
       { id: '7jMNpnQel74', title: 'Hasbi Rabbi', artist: 'Sami Yusuf', start: 50, length: 10, audio: 'audio/7jMNpnQel74.mp3' }
     ];
 
-    let player, current, timer, index = 0;
-    const input = document.getElementById('guessInput');
-    const suggestions = document.getElementById('suggestions');
-    const overlay = document.getElementById('overlay');
-    const popup = document.getElementById('popup');
-    const popupResult = document.getElementById('popupResult');
-    const popupTitle = document.getElementById('popup-title');
-    const popupArtist = document.getElementById('popup-artist');
-    const popupAudio = document.getElementById('popupAudio');
-
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('player', {
-        height: '0', width: '0',
-        playerVars: { controls: 0 },
-        events: { onReady: loadSong }
-      });
-    }
-
-    function loadSong() {
-      current = songs[index];
-      index = (index + 1) % songs.length;
-      clearTimeout(timer);
-      input.value = '';
-      suggestions.innerHTML = '';
-      suggestions.style.display = 'none';
-      popup.style.display = 'none';
-      overlay.style.display = 'none';
-      player.loadVideoById({ videoId: current.id, startSeconds: current.start });
-    }
-
-    document.getElementById('playBtn').onclick = () => {
-      player.seekTo(current.start);
-      player.playVideo();
-      clearTimeout(timer);
-      timer = setTimeout(() => player.pauseVideo(), current.length * 1000);
-    };
-
-    // show all suggestions on focus
-    input.addEventListener('focus', () => {
-      suggestions.innerHTML = '';
-      songs.forEach(s => {
-        const li = document.createElement('li');
-        li.textContent = s.title;
-        li.onclick = () => {
-          input.value = s.title;
-          suggestions.style.display = 'none';
-        };
-        suggestions.appendChild(li);
-      });
-      suggestions.style.display = 'block';
+    // ─── native dropdown population ─────────────────────────────────────────
+    const dataList = document.getElementById('songList');
+    songs.forEach(song => {
+      const opt = document.createElement('option');
+      opt.value = song.title;
+      dataList.appendChild(opt);
     });
+    // ────────────────────────────────────────────────────────────────────────
 
-    // filter suggestions as user types
-    input.addEventListener('input', () => {
-      const q = input.value.trim().toLowerCase();
-      suggestions.innerHTML = '';
-      const matches = songs.filter(s => s.title.toLowerCase().includes(q));
-      matches.forEach(s => {
-        const li = document.createElement('li');
-        li.textContent = s.title;
-        li.onclick = () => {
-          input.value = s.title;
-          suggestions.style.display = 'none';
-        };
-        suggestions.appendChild(li);
-      });
-      suggestions.style.display = matches.length ? 'block' : 'none';
+      let player, current, timer;
+
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+      height: '0', width: '0',
+      playerVars: { controls: 0 },
+      events: { onReady: loadRandomSong }
     });
+  }
 
-    // hide suggestions on blur (allow click)
-    input.addEventListener('blur', () => {
-      setTimeout(() => suggestions.style.display = 'none', 100);
+  function loadRandomSong() {
+    clearTimeout(timer);
+    let next;
+    do {
+      next = songs[Math.floor(Math.random() * songs.length)];
+    } while (current && next.id === current.id);
+    current = next;
+
+    // reset UI
+    document.getElementById('guessInput').value = '';
+    closePopup();
+    player.loadVideoById({
+      videoId: current.id,
+      startSeconds: current.start
     });
+  }
 
-    function showPopup(isCorrect) {
-      popupResult.textContent = isCorrect ? 'Correct!' : 'Incorrect!';
-      popupTitle.textContent = current.title;
-      popupArtist.textContent = `By ${current.artist}`;
-      popupAudio.src = current.audio;
-      overlay.style.display = 'block';
-      popup.style.display = 'block';
-    }
+  document.getElementById('playBtn').onclick = () => {
+    clearTimeout(timer);
+    player.playVideo();
+    timer = setTimeout(() => player.pauseVideo(), current.length * 1000);
+  };
 
-    function closePopup() {
-      popup.style.display = 'none';
-      overlay.style.display = 'none';
-    }
+  document.getElementById('nextBtn').onclick = loadRandomSong;
 
-    document.getElementById('submitBtn').onclick = () => {
-      const guess = input.value.trim().toLowerCase();
-      showPopup(guess === current.title.toLowerCase());
-    };
+  function showPopup(isCorrect) {
+    document.getElementById('popupResult').textContent = isCorrect ? 'Correct!' : 'Incorrect!';
+    document.getElementById('popup-title').textContent = current.title;
+    document.getElementById('popup-artist').textContent = `By ${current.artist}`;
+    document.getElementById('popupAudio').src = current.audio;
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('popup').style.display = 'block';
+  }
 
-    document.getElementById('revealBtn').onclick = () => {
-      showPopup(false);
-    };
+  function closePopup() {
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('popup').style.display = 'none';
+  }
 
-    window.onload = loadSong;
+  document.getElementById('submitBtn').onclick = () => {
+    const guess = document.getElementById('guessInput').value.trim().toLowerCase();
+    showPopup(guess === current.title.toLowerCase());
+  };
+
+  document.getElementById('revealBtn').onclick = () => showPopup(false);
+
+  // 🔘 Add close functionality
+  document.getElementById('overlay').onclick = closePopup;
+  document.querySelector('#popup button').onclick = closePopup;
+
+  window.onload = loadRandomSong;
+
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
