@@ -9,83 +9,104 @@
   <link rel="stylesheet" href="../style.css">
 
   <style>
-    /* header overrides */
-    header .brand img { display: none; }
-    #mainNav a, #mainNav button { display: none; }
-    #mainNav .home { display: inline-block; }
-    #mainNav .home:hover { background: #065c2f; color: #fff; }
-
-    /* layout */
+    /* overall page */
     body {
-      font-family: 'Nunito', sans-serif;
       margin: 0;
-      background: #f9fafb;
+      background: #121212;
+      font-family: 'Nunito', sans-serif;
+      color: #fff;
     }
+
+    /* header */
+    header {
+      background: #000;
+      padding: 1rem;
+      text-align: center;
+    }
+    header .brand h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #1DB954;
+    }
+
+    /* game container */
     #game {
+      background: #282828;
       max-width: 600px;
       margin: 2rem auto;
-      background: #fff;
       padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+      position: relative;
     }
-    h2 {
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
-      color: #1f2937;
+    #game h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
-    p {
-      color: #4b5563;
-      margin-bottom: 1.5rem;
+    #game p {
+      margin-bottom: 2rem;
+      color: #b3b3b3;
     }
-    button {
-      background: #0b7d40;
+
+    /* buttons */
+    .btn {
+      background: #1DB954;
       color: #fff;
       border: none;
-      padding: 0.6rem 1rem;
-      border-radius: 6px;
+      padding: 0.75rem 1.25rem;
+      border-radius: 50px;
       cursor: pointer;
       font-weight: 600;
+      margin-right: 0.5rem;
+      transition: background 0.2s;
     }
-    button:hover {
-      background: #065c2f;
+    .btn:hover {
+      background: #1ed760;
     }
-    input[type="text"] {
+
+    /* autocomplete */
+    .autocomplete {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+    .autocomplete input {
       width: 100%;
       padding: 0.75rem 1rem;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
+      border-radius: 50px;
+      border: 1px solid #404040;
+      background: #121212;
+      color: #fff;
       font-size: 1rem;
       box-sizing: border-box;
     }
-
-    /* autocomplete container */
-    .autocomplete {
-      position: relative;
-      margin-bottom: 1rem;
+    .autocomplete input::placeholder {
+      color: #666;
     }
     #suggestions {
+      display: none;
       position: absolute;
       top: 100%;
       left: 0;
       right: 0;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      background: #fff;
+      background: #282828;
+      border: 1px solid #404040;
+      border-radius: 8px;
       max-height: 200px;
       overflow-y: auto;
       z-index: 10;
-      display: none;
+      margin-top: 0.5rem;
     }
     #suggestions li {
+      list-style: none;
       padding: 0.5rem 1rem;
       cursor: pointer;
+      color: #fff;
     }
     #suggestions li:hover {
-      background: #f3f4f6;
+      background: #3e3e3e;
     }
 
     /* popup + overlay */
@@ -93,7 +114,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.8);
       z-index: 90;
     }
     #popup {
@@ -102,68 +123,62 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: #fff;
+      background: #282828;
       padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      border-radius: 8px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.7);
       z-index: 100;
-      max-width: 90%;
-      width: 320px;
+      width: 90%;
+      max-width: 400px;
       text-align: center;
     }
     #popup h3 {
       margin: 0 0 1rem;
-      color: #1f2937;
+      font-size: 1.5rem;
+      color: #1DB954;
     }
     #popup-title {
       font-weight: 600;
       margin-bottom: 0.5rem;
     }
     #popup-artist {
-      color: #4b5563;
+      color: #b3b3b3;
       margin-bottom: 1rem;
     }
     #popup audio {
       width: 100%;
-      margin-bottom: 1rem;
-      border-radius: 6px;
+      margin-bottom: 1.5rem;
+      outline: none;
     }
-    #popup button {
-      background: #0b7d40;
-      color: #fff;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
+    #popup .btn {
+      margin: 0;
     }
+
+    /* hide YouTube iframe */
+    #player { position: absolute; left: -9999px; }
   </style>
 </head>
 <body>
   <header>
     <div class="brand">
-      <h1 style="margin:0; font-size:1.2rem; color:#fff;">Heardle Noor Al Huda</h1>
+      <h1>Heardle Noor Al Huda</h1>
     </div>
-    <nav id="mainNav">
-      <a href="index.html" class="home">Home</a>
-    </nav>
   </header>
 
   <div id="game">
     <h2>Guess the Latmiya/Nasheed</h2>
-    <p>Listen to the chorus snippet, type your guess below, then submit.</p>
+    <p>Listen to the chorus snippet, then type your guess below.</p>
 
-    <div id="player" style="position:absolute; left:-9999px;"></div>
-
-    <button id="playBtn">▶ Play Snippet</button>
-    <button id="revealBtn">🔍 Reveal Answer</button>
+    <button class="btn" id="playBtn">▶ Play Snippet</button>
+    <button class="btn" id="revealBtn">🔍 Reveal</button>
 
     <div class="autocomplete">
       <input type="text" id="guessInput" placeholder="Type song title..." autocomplete="off" />
       <ul id="suggestions"></ul>
     </div>
 
-    <button id="submitBtn">Submit</button>
+    <button class="btn" id="submitBtn">Submit Guess</button>
+    <button class="btn" id="nextBtn">Next Song</button>
   </div>
 
   <div id="overlay"></div>
@@ -172,36 +187,41 @@
     <div id="popup-title"></div>
     <div id="popup-artist"></div>
     <audio id="popupAudio" controls></audio>
-    <button onclick="closePopup()">Close</button>
+    <button class="btn" onclick="closePopup()">Close</button>
   </div>
 
   <!-- YouTube IFrame API -->
   <script src="https://www.youtube.com/iframe_api"></script>
   <script>
+    /*
+      To change chorus snippet timing:
+      - In the songs array below, adjust `start` (seconds) for where the snippet begins.
+      - Adjust `length` (seconds) for how long the snippet plays.
+    */
     const songs = [
-      { id: 'LmoTq5mA1Pk', title: 'Haidar Ya Ali', artist: 'Ali Bouhamad', start: 45, length: 10, audio: 'audio/LmoTq5mA1Pk.mp3' },
-      { id: 'X4dO7whTwfc', title: 'Welcome in All Languages (Mashaya Poem)', artist: 'Haider Al-Bayati', start: 60, length: 12, audio: 'audio/X4dO7whTwfc.mp3' },
-      { id: '5xJkdp_3cDA', title: 'Ali (May Allah Be Pleased With Him)', artist: 'Mishary Rashid Alafasy', start: 40, length: 10, audio: 'audio/5xJkdp_3cDA.mp3' },
-      { id: 'P4BgXRm3cf8', title: 'Walking Planet (Mashaya Poem 1446 AH)', artist: 'Haider Al-Bayati', start: 50, length: 10, audio: 'audio/P4BgXRm3cf8.mp3' },
-      { id: 'tXp_14uOh1c', title: 'Step by Step (We Are Servants)', artist: 'Nazar Al Qatari', start: 55, length: 10, audio: 'audio/tXp_14uOh1c.mp3' },
-      { id: 'CmWOpmoQlow', title: 'Journey to Allah', artist: 'Haider Al-Bayati', start: 60, length: 10, audio: 'audio/CmWOpmoQlow.mp3' },
-      { id: 'sduS4UMqRCE', title: 'Wrath of Allah (7th Night of Muharram 1446 AH)', artist: 'Haider Al-Bayati', start: 45, length: 10, audio: 'audio/sduS4UMqRCE.mp3' },
-      { id: 'iEkyieYcICo', title: 'Visitor of Ali', artist: 'Haider Al-Bayati', start: 50, length: 10, audio: 'audio/iEkyieYcICo.mp3' },
-      { id: '40nEFfCzb0U', title: 'Maula Ya Salli (Slowed & Reverb)', artist: 'Sami Yusuf ft. Qasida Burda Shareef', start: 40, length: 10, audio: 'audio/40nEFfCzb0U.mp3' },
-      { id: 'Vqfy4ScRXFQ', title: 'Ya Nabi Salam Alayka (Arabic Version)', artist: 'Maher Zain', start: 45, length: 10, audio: 'audio/Vqfy4ScRXFQ.mp3' },
-      { id: 'ik8jfDQrLAs', title: 'Qalbi Fil Madinah', artist: 'Maher Zain & Harris J', start: 50, length: 10, audio: 'audio/ik8jfDQrLAs.mp3' },
-      { id: 'tBbdSzwxqyY', title: 'Rahmatun Lil’Alameen', artist: 'Maher Zain', start: 40, length: 10, audio: 'audio/tBbdSzwxqyY.mp3' },
-      { id: 'pwgLyCIMJKQ', title: 'Peace Be Upon You, Mahdi', artist: 'Mohammed Ghuloom', start: 45, length: 10, audio: 'audio/pwgLyCIMJKQ.mp3' },
-      { id: 'iU3mHGLhpT0', title: 'They Heard Me Say Welcome', artist: 'Sayyed Fadhel Al-Mousawi', start: 50, length: 10, audio: 'audio/iU3mHGLhpT0.mp3' },
-      { id: 'rGLgjU9Q97E', title: 'Life and Death', artist: 'Ali Bouhamad', start: 45, length: 10, audio: 'audio/rGLgjU9Q97E.mp3' },
-      { id: 'GojSIX707xI', title: 'Your Mention is Ali', artist: 'Mulla Hatim Al-Abdullah', start: 50, length: 10, audio: 'audio/GojSIX707xI.mp3' },
-      { id: 'ch3bBvbwzwg', title: 'Tasbihat of Zahra', artist: 'Hajj Mahdi Rasouli', start: 40, length: 10, audio: 'audio/ch3bBvbwzwg.mp3' },
-      { id: '1axNTXhMXsU', title: 'Ayatollah (In Praise of Amir al-Mu’minin)', artist: 'Nazar Al Qatari & Sayyed Mohammed Al-Husseini', start: 55, length: 10, audio: 'audio/1axNTXhMXsU.mp3' },
-      { id: 'MMYygIYXmuo', title: 'Image of Ali', artist: 'Mulla Ali Al-Saadi', start: 45, length: 10, audio: 'audio/MMYygIYXmuo.mp3' },
-      { id: '7jMNpnQel74', title: 'Hasbi Rabbi', artist: 'Sami Yusuf', start: 50, length: 10, audio: 'audio/7jMNpnQel74.mp3' }
+      { id:'LmoTq5mA1Pk', title:'Haidar Ya Ali', artist:'Ali Bouhamad', start:45, length:10, audio:'audio/LmoTq5mA1Pk.mp3' },
+      { id:'X4dO7whTwfc', title:'Welcome in All Languages (Mashaya Poem)', artist:'Haider Al-Bayati', start:60, length:12, audio:'audio/X4dO7whTwfc.mp3' },
+      { id:'5xJkdp_3cDA', title:'Ali (May Allah Be Pleased With Him)', artist:'Mishary Rashid Alafasy', start:40, length:10, audio:'audio/5xJkdp_3cDA.mp3' },
+      { id:'P4BgXRm3cf8', title:'Walking Planet (Mashaya Poem 1446 AH)', artist:'Haider Al-Bayati', start:50, length:10, audio:'audio/P4BgXRm3cf8.mp3' },
+      { id:'tXp_14uOh1c', title:'Step by Step (We Are Servants)', artist:'Nazar Al Qatari', start:55, length:10, audio:'audio/tXp_14uOh1c.mp3' },
+      { id:'CmWOpmoQlow', title:'Journey to Allah', artist:'Haider Al-Bayati', start:60, length:10, audio:'audio/CmWOpmoQlow.mp3' },
+      { id:'sduS4UMqRCE', title:'Wrath of Allah (7th Night of Muharram 1446 AH)', artist:'Haider Al-Bayati', start:45, length:10, audio:'audio/sduS4UMqRCE.mp3' },
+      { id:'iEkyieYcICo', title:'Visitor of Ali', artist:'Haider Al-Bayati', start:50, length:10, audio:'audio/iEkyieYcICo.mp3' },
+      { id:'40nEFfCzb0U', title:'Maula Ya Salli (Slowed & Reverb)', artist:'Sami Yusuf ft. Qasida Burda Shareef', start:40, length:10, audio:'audio/40nEFfCzb0U.mp3' },
+      { id:'Vqfy4ScRXFQ', title:'Ya Nabi Salam Alayka (Arabic Version)', artist:'Maher Zain', start:45, length:10, audio:'audio/Vqfy4ScRXFQ.mp3' },
+      { id:'ik8jfDQrLAs', title:'Qalbi Fil Madinah', artist:'Maher Zain & Harris J', start:50, length:10, audio:'audio/ik8jfDQrLAs.mp3' },
+      { id:'tBbdSzwxqyY', title:'Rahmatun Lil’Alameen', artist:'Maher Zain', start:40, length:10, audio:'audio/tBbdSzwxqyY.mp3' },
+      { id:'pwgLyCIMJKQ', title:'Peace Be Upon You, Mahdi', artist:'Mohammed Ghuloom', start:45, length:10, audio:'audio/pwgLyCIMJKQ.mp3' },
+      { id:'iU3mHGLhpT0', title:'They Heard Me Say Welcome', artist:'Sayyed Fadhel Al-Mousawi', start:50, length:10, audio:'audio/iU3mHGLhpT0.mp3' },
+      { id:'rGLgjU9Q97E', title:'Life and Death', artist:'Ali Bouhamad', start:45, length:10, audio:'audio/rGLgjU9Q97E.mp3' },
+      { id:'GojSIX707xI', title:'Your Mention is Ali', artist:'Mulla Hatim Al-Abdullah', start:50, length:10, audio:'audio/GojSIX707xI.mp3' },
+      { id:'ch3bBvbwzwg', title:'Tasbihat of Zahra', artist:'Hajj Mahdi Rasouli', start:40, length:10, audio:'audio/ch3bBvbwzwg.mp3' },
+      { id:'1axNTXhMXsU', title:'Ayatollah (In Praise of Amir al-Mu’minin)', artist:'Nazar Al Qatari & Sayyed Mohammed Al-Husseini', start:55, length:10, audio:'audio/1axNTXhMXsU.mp3' },
+      { id:'MMYygIYXmuo', title:'Image of Ali', artist:'Mulla Ali Al-Saadi', start:45, length:10, audio:'audio/MMYygIYXmuo.mp3' },
+      { id:'7jMNpnQel74', title:'Hasbi Rabbi', artist:'Sami Yusuf', start:50, length:10, audio:'audio/7jMNpnQel74.mp3' }
     ];
 
-    let player, current, timer, index = 0;
+    let player, currentSong, timer;
     const input = document.getElementById('guessInput');
     const suggestions = document.getElementById('suggestions');
     const overlay = document.getElementById('overlay');
@@ -215,30 +235,41 @@
       player = new YT.Player('player', {
         height: '0', width: '0',
         playerVars: { controls: 0 },
-        events: { onReady: loadSong }
+        events: { onReady: () => loadRandomSong() }
       });
     }
 
-    function loadSong() {
-      current = songs[index];
-      index = (index + 1) % songs.length;
+    function loadRandomSong() {
       clearTimeout(timer);
+      // pick new random that's not the current
+      let next;
+      do {
+        next = songs[Math.floor(Math.random() * songs.length)];
+      } while (currentSong && next.id === currentSong.id);
+      currentSong = next;
+
+      // reset UI
       input.value = '';
       suggestions.innerHTML = '';
       suggestions.style.display = 'none';
-      popup.style.display = 'none';
       overlay.style.display = 'none';
-      player.loadVideoById({ videoId: current.id, startSeconds: current.start });
+      popup.style.display = 'none';
+
+      // load snippet
+      player.loadVideoById({
+        videoId: currentSong.id,
+        startSeconds: currentSong.start
+      });
     }
 
     document.getElementById('playBtn').onclick = () => {
-      player.seekTo(current.start);
+      player.seekTo(currentSong.start);
       player.playVideo();
       clearTimeout(timer);
-      timer = setTimeout(() => player.pauseVideo(), current.length * 1000);
+      timer = setTimeout(() => player.pauseVideo(), currentSong.length * 1000);
     };
 
-    // show all suggestions on focus
+    // suggestions: show all on focus
     input.addEventListener('focus', () => {
       suggestions.innerHTML = '';
       songs.forEach(s => {
@@ -253,7 +284,7 @@
       suggestions.style.display = 'block';
     });
 
-    // filter suggestions as user types
+    // filter as you type
     input.addEventListener('input', () => {
       const q = input.value.trim().toLowerCase();
       suggestions.innerHTML = '';
@@ -270,16 +301,16 @@
       suggestions.style.display = matches.length ? 'block' : 'none';
     });
 
-    // hide suggestions on blur (allow click)
     input.addEventListener('blur', () => {
       setTimeout(() => suggestions.style.display = 'none', 100);
     });
 
     function showPopup(isCorrect) {
       popupResult.textContent = isCorrect ? 'Correct!' : 'Incorrect!';
-      popupTitle.textContent = current.title;
-      popupArtist.textContent = `By ${current.artist}`;
-      popupAudio.src = current.audio;
+      popupTitle.textContent = currentSong.title;
+      popupArtist.textContent = `By ${currentSong.artist}`;
+      popupAudio.src = currentSong.audio;
+      popupAudio.load();
       overlay.style.display = 'block';
       popup.style.display = 'block';
     }
@@ -291,14 +322,16 @@
 
     document.getElementById('submitBtn').onclick = () => {
       const guess = input.value.trim().toLowerCase();
-      showPopup(guess === current.title.toLowerCase());
+      showPopup(guess === currentSong.title.toLowerCase());
     };
 
     document.getElementById('revealBtn').onclick = () => {
       showPopup(false);
     };
 
-    window.onload = loadSong;
+    document.getElementById('nextBtn').onclick = () => {
+      loadRandomSong();
+    };
   </script>
 </body>
 </html>
